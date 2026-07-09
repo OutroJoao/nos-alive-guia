@@ -323,6 +323,25 @@ function render(){
   ({ all:viewProgram, mine:viewMine, now:viewNow, map:viewMap, assist:viewAssist })[state.tab]();
 }
 
+// ---------- Perfil ----------
+function openProfile(){
+  const p = FESTIVAL.profile; if (!p) return;
+  document.getElementById("profileCard").innerHTML = `
+    <button class="profile-close" onclick="closeProfile()" aria-label="Fechar">✕</button>
+    <img class="profile-photo" src="${p.photo}" alt="${p.name}">
+    <div class="profile-name">${p.name}</div>
+    ${p.subtitle ? `<div class="profile-sub">${p.subtitle}</div>` : ""}
+    <div class="profile-links">
+      ${p.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener" style="background:${l.color}">${l.label}</a>`).join("")}
+    </div>`;
+  document.getElementById("profile").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeProfile(){
+  document.getElementById("profile").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
 // ---------- Pesquisa ----------
 const _norm = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 function openSearch(){

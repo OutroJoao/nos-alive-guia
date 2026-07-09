@@ -42,7 +42,23 @@
   /* Avatar do utilizador — bola no canto, à esquerda da lupa */
   .hero-avatar{position:absolute; top:calc(18px + env(safe-area-inset-top)); right:66px;
     width:90px; height:90px; border-radius:50%; object-fit:cover; object-position:center top;
-    border:3px solid #fff; box-shadow:0 2px 7px rgba(0,0,0,.32); background:#fff;}
+    border:3px solid #fff; box-shadow:0 2px 7px rgba(0,0,0,.32); background:#fff; cursor:pointer;}
+
+  /* Cartão de perfil (abre ao tocar na foto) */
+  .profile{position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:70;
+    display:none; align-items:center; justify-content:center; padding:24px;}
+  .profile.open{display:flex;}
+  .profile-card{background:var(--bg); width:100%; max-width:340px; border:2px solid var(--ink);
+    padding:26px 22px 22px; text-align:center; position:relative;}
+  .profile-close{position:absolute; top:8px; right:10px; font-size:22px; font-weight:800; color:var(--mut); line-height:1;}
+  .profile-photo{width:104px; height:104px; border-radius:50%; object-fit:cover; object-position:center top;
+    border:3px solid var(--ink); margin:0 auto 12px; display:block;}
+  .profile-name{font-size:22px; font-weight:900; letter-spacing:-0.02em;}
+  .profile-sub{font-size:13px; font-weight:600; color:var(--mut); margin-top:2px;}
+  .profile-links{display:flex; flex-direction:column; gap:9px; margin-top:18px;}
+  .profile-links a{display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px; color:#fff; font-size:14px; font-weight:800; text-transform:uppercase;
+    letter-spacing:.02em; text-decoration:none;}
   /* Barra com os dias + relógio */
   .subbar{display:flex; align-items:center; justify-content:flex-end; gap:8px; padding:0 12px;}
   .subbar .days{flex:1 1 auto; min-width:0;}
@@ -272,7 +288,7 @@
       <button class="hero-search" onclick="openSearch()" aria-label="Pesquisar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       </button>
-      <img class="hero-avatar" src="assets/me.jpg" alt="Perfil" onerror="this.style.display='none'">
+      <img class="hero-avatar" src="assets/me.jpg" alt="Perfil" onclick="openProfile()" onerror="this.style.display='none'">
     </div>
     <div class="subbar">
       <div class="days" id="days"></div>
@@ -304,6 +320,10 @@
   </nav>
 
   <div class="sheet" id="sheet"></div>
+
+  <div class="profile" id="profile" onclick="if(event.target===this)closeProfile()">
+    <div class="profile-card" id="profileCard"></div>
+  </div>
 
   <div class="search" id="search">
     <div class="search-bar">

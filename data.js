@@ -230,4 +230,16 @@ const FESTIVAL = {
       "Proibido: vidro e embalagens rígidas.",
     ],
   },
+
+  /* --- Perfil (abre ao tocar na foto no topo) --- */
+  profile: {
+    name: "João Baptista",
+    subtitle: "Institute for Tomorrow",
+    photo: "assets/me.jpg",
+    links: [
+      { label: "LinkedIn",  url: "https://www.linkedin.com/in/joaobaptistafuture/", color: "#0a66c2" },
+      { label: "Instagram", url: "https://www.instagram.com/joaobaptistafuture",    color: "#e1306c" },
+      { label: "WhatsApp",  url: "https://wa.me/351926039826",                       color: "#25d366" },
+    ],
+  },
 };
