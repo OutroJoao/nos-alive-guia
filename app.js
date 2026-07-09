@@ -179,6 +179,31 @@ function viewProgram(){
     <div class="count">${list.length} concerto${list.length!==1?'s':''} · ${dayById[state.day].long}</div>
     ${cards}`;
   stickFbar();
+
+  // No dia atual do festival, salta o scroll para a hora certa (agora / a seguir)
+  if (pendingScrollToNow){
+    pendingScrollToNow = false;
+    const c = festivalNow();
+    requestAnimationFrame(() => {
+      if (!c.simulated && c.day === state.day) scrollToNowCard();
+      else window.scrollTo(0, 0);
+    });
+  }
+}
+
+let pendingScrollToNow = false;
+// coloca o primeiro concerto que ainda não terminou logo por baixo da barra fixa
+function scrollToNowCard(){
+  let target = null;
+  for (const c of document.querySelectorAll("#view .card")){
+    if (!c.classList.contains("past")){ target = c; break; }
+  }
+  if (!target) return;                       // tudo já terminou -> fica onde está
+  const header = document.querySelector("header.top");
+  const fbar = document.querySelector(".fbar");
+  const off = (header ? header.offsetHeight : 0) + (fbar ? fbar.offsetHeight : 0) + 6;
+  const y = window.scrollY + target.getBoundingClientRect().top - off;
+  window.scrollTo(0, Math.max(0, y));
 }
 
 // A barra de filtros fica congelada logo por baixo do cabeçalho fixo (sem descer com os concertos)
@@ -294,12 +319,17 @@ function highlightStage(id){
 }
 
 // ---------- Ações ----------
-function setDay(id){ state.day = id; renderDays(); render(); }
+function setDay(id){ state.day = id; pendingScrollToNow = true; renderDays(); render(); }
 function setStage(id){ state.stageFilter = state.stageFilter===id?null:id; state.onlyFav=false; state.onlyReco=false; render(); }
 function clearFilters(){ state.stageFilter=null; state.onlyFav=false; state.onlyReco=false; render(); }
 function toggleOnlyFav(){ state.onlyFav=!state.onlyFav; state.stageFilter=null; state.onlyReco=false; render(); }
 function toggleOnlyReco(){ state.onlyReco=!state.onlyReco; state.stageFilter=null; state.onlyFav=false; render(); }
-function setTab(t){ state.tab=t; renderNav(); render(); window.scrollTo(0,0); }
+function setTab(t){
+  state.tab = t; renderNav();
+  if (t === "all") pendingScrollToNow = true;
+  render();
+  if (t !== "all") window.scrollTo(0, 0);
+}
 
 // ---------- Render ----------
 function renderDays(){
@@ -508,4 +538,5 @@ tickClock();
 setInterval(tickClock, 15000);
 
 renderDays();
+pendingScrollToNow = true;
 render();
