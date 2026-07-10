@@ -57,11 +57,18 @@ function festivalNow(){
   return { day: FESTIVAL.days[0].id, t: mins("22:20"), simulated: true };
 }
 const dayIndex = id => FESTIVAL.days.findIndex(d => d.id === id);
-// preto ou branco conforme a luminância da cor de fundo
+// Preto ou branco — o que der MAIS contraste sobre a cor de fundo (WCAG).
+// Um limiar fixo de luminância escolhe mal em cores de tom médio.
 function textOn(hex){
   const c = hex.replace("#","");
-  const r = parseInt(c.slice(0,2),16), g = parseInt(c.slice(2,4),16), b = parseInt(c.slice(4,6),16);
-  return (0.299*r + 0.587*g + 0.114*b)/255 > 0.62 ? "#000" : "#fff";
+  const lin = [0,2,4].map(i => {
+    const v = parseInt(c.substr(i,2),16) / 255;
+    return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+  });
+  const L = 0.2126*lin[0] + 0.7152*lin[1] + 0.0722*lin[2];
+  const comBranco = 1.05 / (L + 0.05);   // contraste contra #fff
+  const comPreto  = (L + 0.05) / 0.05;   // contraste contra #000
+  return comPreto >= comBranco ? "#000" : "#fff";
 }
 
 // ---------- Persistência ----------

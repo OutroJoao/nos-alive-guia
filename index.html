@@ -43,7 +43,7 @@
   .hero-logo{height:96px; width:auto; display:block;
     filter:drop-shadow(0 1px 2px rgba(0,0,0,.12));}
   .hero-search{position:absolute; top:calc(14px + env(safe-area-inset-top)); right:14px;
-    width:42px; height:42px; background:rgba(0,0,0,.18); color:#fff;
+    width:44px; height:44px; background:rgba(0,0,0,.18); color:#fff;
     display:flex; align-items:center; justify-content:center;}
   .hero-search svg{width:22px; height:22px;}
   /* Avatar do utilizador — bola no canto, à esquerda da lupa */
@@ -90,7 +90,7 @@
     border-bottom:1px solid var(--line); background:var(--bg);
     position:sticky; top:0; z-index:10;}
   .fbar::-webkit-scrollbar{display:none;}
-  .chip{flex:0 0 auto; border:2px solid var(--ink); padding:8px 15px;
+  .chip{flex:0 0 auto; border:2px solid var(--ink); padding:0 15px; min-height:44px;
     font-size:13px; font-weight:800; white-space:nowrap; display:flex; align-items:center; gap:6px;
     text-transform:uppercase; letter-spacing:.02em;}
   .chip.on{background:var(--ink); color:#fff; border-color:var(--ink);}
@@ -134,18 +134,20 @@
   /* CONCERTO QUE JÁ TERMINOU — passa a cinza (vence o amarelo do recomendado) */
   .card.past{background:#f6f6f6 !important; border-color:#ececec !important;}
   .card.past .card-b{border-left-color:#d6d6d6 !important;}
+  /* Cinzentos legíveis (>=4.5:1 sobre #f6f6f6). O "passado" sinaliza-se pelo
+     fundo cinza + foto a p&b + etiqueta, não por texto ilegível. */
   .card.past .c-time,
-  .card.past .c-title{color:#a6a6a6 !important;}
+  .card.past .c-title{color:#6e6e6e !important;}
   .card.past .c-meta,
   .card.past .c-meta .stg,
   .card.past .reco,
-  .card.past .reco span{color:#b0b0b0 !important;}
+  .card.past .reco span{color:#6e6e6e !important;}
   .card.past .c-meta .sw,
-  .card.past .stg .sw{background:#c9c9c9 !important;}
-  .card.past .c-foot{border-top-color:#ededed !important;}
-  .card.past .fav{background:#fff !important; border-color:#cfcfcf !important; color:#9a9a9a !important;}
-  .card.past .fav.on{background:#bdbdbd !important; border-color:#bdbdbd !important; color:#fff !important;}
-  .c-time .past-tag{background:#e3e3e3; color:#8a8a8a; font-size:10px; font-weight:800;
+  .card.past .stg .sw{background:#b4b4b4 !important;}
+  .card.past .c-foot{border-top-color:#e4e4e4 !important;}
+  .card.past .fav{background:#fff !important; border-color:#a9a9a9 !important; color:#6e6e6e !important;}
+  .card.past .fav.on{background:#6e6e6e !important; border-color:#6e6e6e !important; color:#fff !important;}
+  .c-time .past-tag{background:#e3e3e3; color:#5f5f5f; font-size:10px; font-weight:800;
     padding:2px 7px; margin-left:8px; letter-spacing:.05em;}
   .card-b{padding:14px 14px 12px; border-left:5px solid var(--stage,#999); display:flex; gap:12px; align-items:flex-start;}
   .c-main{flex:1 1 auto; min-width:0;}
@@ -163,7 +165,8 @@
   .c-foot{display:flex;align-items:center;justify-content:space-between;
     border-top:1px solid var(--line); padding:8px 14px;}
   .fav{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;
-    border:2px solid var(--ink);padding:8px 15px;text-transform:uppercase;letter-spacing:.03em;}
+    border:2px solid var(--ink);padding:0 16px;min-height:44px;
+    text-transform:uppercase;letter-spacing:.03em;}
   .fav.on{background:var(--accent);border-color:var(--accent);}
   .fav svg{width:15px;height:15px;}
   .conflict{font-size:11px;font-weight:800;color:#c81e1e;display:flex;align-items:center;gap:4px;}
@@ -237,7 +240,7 @@
   .sheet-hd.has-img::after{background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.15) 45%,rgba(0,0,0,.72) 100%);}
   .sheet-hd > *{position:relative; z-index:1;}
   .sheet-top{display:flex; justify-content:space-between; margin-bottom:24px;}
-  .s-btn{width:40px; height:40px; background:rgba(255,255,255,.22);
+  .s-btn{width:44px; height:44px; background:rgba(255,255,255,.22);
     display:flex; align-items:center; justify-content:center; color:#fff;}
   .s-btn svg{width:20px; height:20px; fill:none; stroke:#fff; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round;}
   .sheet-stage{display:flex; align-items:center; gap:7px; font-size:12px; font-weight:800;

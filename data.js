@@ -196,9 +196,9 @@ const FESTIVAL = {
     "The Warning":      { tier: "sugestao", why: "Começar cedo com rock puro — trio de irmãs mexicanas, no teu lado mais hard rock." },
     "Skunk Anansie":    { tier: "sugestao", why: "Ícone do rock alternativo dos anos 90, com a voz poderosa de Skin e atuações intensas." },
     "Wolf Alice":       { tier: "sugestao", why: "Indie rock aclamado que junta peso e melodias etéreas — na linha de Alabama Shakes e The National." },
-    "The War on Drugs": { tier: "playlist", why: "Está na tua playlist — 'Thinking of a Place'." },
+    "The War on Drugs": { tier: "playlist", why: "Correspondência direta: tens 'Thinking of a Place'. Indie rock neo-psicadélico, atmosférico e cheio de guitarradas." },
     "Foo Fighters":     { tier: "sugestao", why: "O cabeça de cartaz do dia. Fã de Led Zeppelin e Metallica? Os hinos de estádio do Dave Grohl são a escolha lógica." },
-    "Digitalism":       { tier: "sugestao", why: "Eletrónica alternativa, herança Chemical Brothers / STRFKR." },
+    "Digitalism":       { tier: "playlist", why: "És grande fã: tens 'Panavision', 'Blitz', '2 Hearts' e 'Stratosphere' guardadas. O set híbrido ao vivo é imperdível." },
     "Zara Larsson":     { tier: "sugestao", why: "Se preferires um registo pop de grande escala para fechar o dia." },
     "SBTRKT":           { tier: "sugestao", why: "Para fechar a noite depois do Digitalism — eletrónica na veia de Caribou e Disclosure." },
     // --- Dia 11 (Sáb) ---
