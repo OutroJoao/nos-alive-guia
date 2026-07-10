@@ -7,7 +7,8 @@
 // ---------- Estado ----------
 const state = {
   tab: "all",                              // all | mine | now | map
-  day: FESTIVAL.days[0].id,                // dia selecionado
+  // arranca no dia do festival em que estamos (fora do festival, cai no Dia 1)
+  day: festivalNow().day,
   stageFilter: null,                       // id de palco ou null
   onlyFav: false,
   onlyReco: false,
@@ -514,6 +515,9 @@ function nextRelevant(ctx){
 }
 
 // ---------- Arranque ----------
+// impede o browser de restaurar o scroll antigo (senão luta com o salto para a hora atual)
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
 document.querySelectorAll("nav.bottom button").forEach(b =>
   b.addEventListener("click", () => setTab(b.dataset.tab)));
 window.addEventListener("resize", () => { if (state.tab === "all") stickFbar(); });
