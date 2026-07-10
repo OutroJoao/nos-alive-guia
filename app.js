@@ -212,19 +212,23 @@ function viewProgram(){
     <div class="count">${countTxt}</div>
     ${cards}`;
   stickFbar();
-
-  // No dia atual do festival, salta o scroll para a hora certa (agora / a seguir)
-  if (pendingScrollToNow){
-    pendingScrollToNow = false;
-    const c = festivalNow();
-    requestAnimationFrame(() => {
-      if (!c.simulated && c.day === state.day) scrollToNowCard();
-      else window.scrollTo(0, 0);
-    });
-  }
+  applyPendingScroll(state.onlyFav);   // "Guardados" mostra todos os dias
 }
 
 let pendingScrollToNow = false;
+
+/* Salta para a hora atual ao abrir uma vista.
+   todosOsDias = a lista contém os 3 dias (Agenda, Guardados). Nesse caso salta
+   sempre para hoje; numa lista de um só dia, só salta se esse dia for hoje. */
+function applyPendingScroll(todosOsDias){
+  if (!pendingScrollToNow) return;
+  pendingScrollToNow = false;
+  const c = festivalNow();
+  requestAnimationFrame(() => {
+    if (!c.simulated && (todosOsDias || c.day === state.day)) scrollToNowCard();
+    else window.scrollTo(0, 0);
+  });
+}
 // coloca o primeiro concerto que ainda não terminou logo por baixo da barra fixa
 function scrollToNowCard(){
   let target = null;
@@ -268,6 +272,7 @@ function viewMine(){
 
   if (!agendaShows().length){
     el.innerHTML = `<div class="empty"><b>A tua agenda está vazia</b>Toca em “Guardar” num concerto e ele aparece aqui, junto com os artistas da tua playlist.</div>`;
+    pendingScrollToNow = false;
     return;
   }
   let html = "";
@@ -285,6 +290,7 @@ function viewMine(){
     });
   });
   el.innerHTML = html;
+  applyPendingScroll(true);   // a Agenda tem os 3 dias -> abre em hoje, na hora atual
 }
 
 function viewNow(){
@@ -374,14 +380,15 @@ function highlightStage(id){
 // ---------- Ações ----------
 function setDay(id){ state.day = id; pendingScrollToNow = true; renderDays(); render(); }
 function setStage(id){ state.stageFilter = state.stageFilter===id?null:id; state.onlyFav=false; state.onlyReco=false; render(); }
-function clearFilters(){ state.stageFilter=null; state.onlyFav=false; state.onlyReco=false; render(); }
-function toggleOnlyFav(){ state.onlyFav=!state.onlyFav; state.stageFilter=null; state.onlyReco=false; render(); }
+function clearFilters(){ state.stageFilter=null; state.onlyFav=false; state.onlyReco=false; pendingScrollToNow=true; render(); }
+function toggleOnlyFav(){ state.onlyFav=!state.onlyFav; state.stageFilter=null; state.onlyReco=false; pendingScrollToNow=true; render(); }
 function toggleOnlyReco(){ state.onlyReco=!state.onlyReco; state.stageFilter=null; state.onlyFav=false; render(); }
 function setTab(t){
   state.tab = t; renderNav();
-  if (t === "all") pendingScrollToNow = true;
+  const saltaParaAgora = (t === "all" || t === "mine");
+  if (saltaParaAgora) pendingScrollToNow = true;
   render();
-  if (t !== "all") window.scrollTo(0, 0);
+  if (!saltaParaAgora) window.scrollTo(0, 0);
 }
 
 // ---------- Render ----------
