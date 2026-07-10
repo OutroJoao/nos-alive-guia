@@ -141,8 +141,9 @@ function cardHTML(s, ctx){
   const thumb = img ? `<img class="c-thumb" src="${img}" alt="" loading="lazy">` : "";
 
   return `
-    <div class="card ${isLive?'live':''} ${rec?'rec '+rec.tier:''} ${isPast?'past':''}" onclick="openDetail('${s.id}')">
-      <div class="card-b" style="--stage:${st.color}">
+    <div class="card ${isLive?'live':''} ${rec?'rec '+rec.tier:''} ${isPast?'past':''}"
+         style="--stage:${st.color}" onclick="openDetail('${s.id}')">
+      <div class="card-b">
         <div class="c-main">
           <div class="c-time mono">${fmtRange(s)}${tag}</div>
           <div class="c-title">${s.artist}</div>

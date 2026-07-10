@@ -73,15 +73,18 @@
   /* Relógio — caixa preta ao lado dos dias (mesma font da app) */
   .clock{flex:0 0 auto; display:inline-flex; align-items:center; background:var(--ink); color:#fff;
     padding:8px 13px; box-shadow:0 1px 4px rgba(0,0,0,.2);}
-  .clock-t{font-size:19px; font-weight:800; letter-spacing:.02em; line-height:1; font-variant-numeric:tabular-nums;}
+  /* espaçamento entre dígitos maior; a margem negativa anula o espaço que
+     o letter-spacing deixa depois do último dígito, mantendo-o centrado */
+  .clock-t{font-size:20px; font-weight:800; letter-spacing:.16em; margin-right:-.16em;
+    line-height:1; font-variant-numeric:tabular-nums;}
 
   /* Day strip */
   .days{display:flex; gap:6px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none;}
   .days::-webkit-scrollbar{display:none;}
   .day{flex:0 0 auto; text-align:center; padding:6px 4px; width:60px;}
-  .day .dow{font-size:10px; font-weight:800; color:var(--mut); letter-spacing:.06em;}
-  .day .num{font-size:22px; font-weight:800; margin-top:2px;
-    width:40px;height:40px;line-height:40px;border-radius:50%;margin:2px auto 0;}
+  .day .dow{font-size:10px; font-weight:800; color:var(--mut); letter-spacing:.06em; line-height:1;}
+  .day .num{font-size:22px; font-weight:800;
+    width:40px;height:40px;line-height:40px;border-radius:50%;margin:9px auto 0;}
   .day.active .dow{color:var(--ink);}
   .day.active .num{background:var(--accent); color:#000;}
 
@@ -302,6 +305,75 @@
   .sres-title{font-size:16px; font-weight:800; letter-spacing:-0.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .sres-sub{font-size:12px; font-weight:600; color:var(--mut); display:flex; align-items:center; gap:6px;}
   .sres-sub .sw{width:9px; height:9px; flex:0 0 auto;}
+
+  /* ============================================================
+     NEOBRUTALISMO — camada única. Apagar este bloco reverte tudo.
+     Regra da sombra: elementos claros -> sombra preta.
+                      elementos escuros -> sombra cinza (senão não se vê).
+                      "a tocar agora"   -> sombra magenta (a única colorida).
+     ============================================================ */
+  :root{ --nbsh:#000; --nbw:3px; }
+
+  /* Estrutura: tudo separado por linhas pretas grossas */
+  .hero{ background:#2fbfe0; border-bottom:var(--nbw) solid var(--ink); }
+  header.top{ border-bottom:var(--nbw) solid var(--ink); }
+  .fbar{ border-bottom:var(--nbw) solid var(--ink); padding:10px 16px 15px; }
+  nav.bottom{ border-top:var(--nbw) solid var(--ink); }
+
+  /* Cartões: borda grossa + sombra dura */
+  .card{ border:var(--nbw) solid var(--ink); box-shadow:5px 5px 0 var(--nbsh); margin-bottom:19px; }
+  .card.live{ --nbsh:var(--accent2); box-shadow:5px 5px 0 var(--accent2); }
+  .card.past{ --nbsh:#c4c4c4; border-color:#a9a9a9 !important; box-shadow:5px 5px 0 #c4c4c4 !important; }
+  .c-title{ font-weight:900; letter-spacing:-0.03em; }
+
+  /* Controlos: borda grossa + sombra dura + "afundar" ao carregar */
+  .chip, .fav, .lk, .assist-btn, .sheet-cta button, .profile-links a,
+  .hero-search, .s-btn, .info-block, .profile-card, .gap, .banner, .rmap-scroll{
+    border:var(--nbw) solid var(--ink);
+    box-shadow:4px 4px 0 var(--nbsh);
+  }
+  .lk{ color:#fff; }
+  .chip.on, .clock, .assist-btn, .lk-web,
+  .fav.on, .card.rec .fav.on, .card.past .fav.on{ --nbsh:#b9b9b9; }
+  .clock{ box-shadow:4px 4px 0 #c4c4c4; }
+
+  .card:active, .chip:active, .fav:active, .lk:active, .assist-btn:active,
+  .sheet-cta button:active, .profile-links a:active, .hero-search:active, .s-btn:active{
+    transform:translate(3px,3px);
+    box-shadow:1px 1px 0 var(--nbsh);
+  }
+
+  /* Detalhes */
+  .hero-search{ background:#fff; color:var(--ink); }
+  .hero-avatar{ border:var(--nbw) solid var(--ink); box-shadow:4px 4px 0 var(--ink); }
+  .day.active .num{ box-shadow:0 0 0 var(--nbw) var(--ink); }
+  nav.bottom .badge{ border:2px solid var(--ink); }
+  .sheet-hd{ border-bottom:var(--nbw) solid var(--ink); }
+  .search-bar{ border-bottom:var(--nbw) solid var(--ink); }
+
+  /* Tempo livre: tracejado -> hachurado, que é o que "vazio" parece */
+  .gap{ background:repeating-linear-gradient(45deg,#fff 0 9px,#f1f1f1 9px 18px); }
+  .gap-s{ color:#5f5f5f; }
+
+  /* Barra inferior: 5 blocos divididos por linhas pretas.
+     O separador ativo inverte-se (preto sólido, conteúdo branco) — neutro,
+     para não roubar significado ao amarelo/magenta. */
+  nav.bottom{ background:#fff; }
+  nav.bottom button{ border-right:var(--nbw) solid var(--ink);
+    text-transform:uppercase; letter-spacing:.03em; color:#5f5f5f; }
+  nav.bottom button:last-child{ border-right:none; }
+  nav.bottom svg{ stroke-width:2.4; }
+  nav.bottom button.on{ background:var(--ink); color:#fff; }
+  nav.bottom button.on .badge{ border-color:#fff; }
+  nav.bottom button:active{ background:#dcdcdc; }
+  nav.bottom button.on:active{ background:#333; }
+
+  /* Rodapé do cartão = cor sólida do palco. O botão e o aviso ficam em
+     blocos brancos, para o contraste não depender da cor do palco. */
+  .c-foot{ background:var(--stage,#fff); border-top:var(--nbw) solid var(--ink); }
+  .fav{ background:#fff; }
+  .conflict{ background:#fff; border:2px solid var(--ink); padding:7px 9px; }
+  .card.past .c-foot{ background:#e6e6e6 !important; border-top-color:#a9a9a9 !important; }
 </style>
 </head>
 <body>
