@@ -186,11 +186,20 @@ const FESTIVAL = {
 
   /* --- "★ Para ti" — recomendações do perfil Spotify, ancoradas ao cartaz oficial --- */
   recos: {
-    "The War on Drugs": { tier: "top",   why: "Indie atmosférico que já ouves — 'Thinking of a Place'." },
+    // --- Dia 9 (Qui) ---
     "Alabama Shakes":   { tier: "top",   why: "Soul orgânica na linha de The Teskey Brothers e Marcus King." },
     "Matt Berninger":   { tier: "top",   why: "Barítono narrativo, mesma veia de Gang of Youths." },
-    "Digitalism":       { tier: "top",   why: "Eletrónica alternativa, herança Chemical Brothers / STRFKR." },
     "Polo & Pan":       { tier: "top",   why: "French touch tropical à Sébastien Tellier / Maribou State." },
+    // --- Dia 10 (Sex) ---
+    "Foo Fighters":     { tier: "top",   why: "O cabeça de cartaz do dia. Fã de Led Zeppelin e Metallica? Os hinos de estádio do Dave Grohl são a escolha lógica." },
+    "Wolf Alice":       { tier: "top",   why: "Indie rock aclamado que junta peso e melodias etéreas — na linha de Alabama Shakes e The National." },
+    "The War on Drugs": { tier: "top",   why: "Indie atmosférico que já ouves — 'Thinking of a Place'." },
+    "Digitalism":       { tier: "top",   why: "Eletrónica alternativa, herança Chemical Brothers / STRFKR." },
+    "SBTRKT":           { tier: "top",   why: "Para fechar a noite depois do Digitalism — eletrónica na veia de Caribou e Disclosure." },
+    "Skunk Anansie":    { tier: "taste", why: "Ícone do rock alternativo dos anos 90, com a voz poderosa de Skin e atuações intensas." },
+    "The Warning":      { tier: "taste", why: "Começar cedo com rock puro — trio de irmãs mexicanas, no teu lado mais hard rock." },
+    "Zara Larsson":     { tier: "taste", why: "Se preferires um registo pop de grande escala para fechar o dia." },
+    // --- Dia 11 (Sáb) ---
     "Teddy Swims":      { tier: "taste", why: "Soul contemporânea de raízes — afinidade com Jon Batiste." },
   },
 
