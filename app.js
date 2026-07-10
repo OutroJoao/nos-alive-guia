@@ -87,9 +87,17 @@ function showsForDay(day){
 function favShows(){
   return FESTIVAL.shows.filter(s => state.favs.has(s.id));
 }
-// Concertos favoritos que colidem com este
+// "Para ti" verde = artista que está mesmo na tua playlist
+const isPlaylistReco = s => { const r = recoFor(s.artist); return !!r && r.tier === "playlist"; };
+// A AGENDA = o que guardaste + os verdes (na tua playlist)
+const inAgenda = s => state.favs.has(s.id) || isPlaylistReco(s);
+function agendaShows(){ return FESTIVAL.shows.filter(inAgenda); }
+function agendaForDay(day){
+  return agendaShows().filter(s => s.day === day).sort((a,b) => mins(a.start) - mins(b.start));
+}
+// Concertos da agenda que colidem com este
 function conflictsFor(show){
-  return favShows().filter(o => o.id !== show.id && overlaps(o, show));
+  return agendaShows().filter(o => o.id !== show.id && overlaps(o, show));
 }
 
 // ---------- Componentes (HTML) ----------
@@ -112,7 +120,7 @@ function cardHTML(s, ctx){
   const isNext = ctx.day === s.day && mins(s.start) > ctx.t && mins(s.start) - ctx.t <= 45;
   const di = dayIndex(s.day), ndi = dayIndex(ctx.day);
   const isPast = di < ndi || (di === ndi && ctx.t >= mins(s.end));
-  const conf = fav ? conflictsFor(s) : [];
+  const conf = inAgenda(s) ? conflictsFor(s) : [];
 
   let tag = "";
   if (isLive)      tag = `<span class="live-tag">● AGORA</span>`;
@@ -167,25 +175,40 @@ function viewProgram(){
       onclick="setStage('${s.id}')">${s.name}</button>`;
   }).join("");
 
-  let list = showsForDay(state.day);
-  if (state.stageFilter) list = list.filter(s => s.stage === state.stageFilter);
-  if (state.onlyFav)     list = list.filter(s => state.favs.has(s.id));
-  if (state.onlyReco)    list = list.filter(s => recoFor(s.artist));
-
   const ctx = festivalNow();
-  const cards = list.length
-    ? list.map(s => cardHTML(s, ctx)).join("")
-    : `<div class="empty"><b>Sem concertos</b>Experimenta outro dia ou tira os filtros.</div>`;
+  let cards, countTxt;
+
+  if (state.onlyFav){
+    // Guardados: TODOS os dias, agrupados por dia
+    const favs = favShows().sort((a,b) =>
+      a.day === b.day ? mins(a.start) - mins(b.start) : dayIndex(a.day) - dayIndex(b.day));
+    countTxt = `${favs.length} guardado${favs.length!==1?'s':''} · todos os dias`;
+    cards = favs.length
+      ? FESTIVAL.days.map(d => {
+          const items = favs.filter(s => s.day === d.id);
+          if (!items.length) return "";
+          return `<div class="daylabel">${d.long}</div>` + items.map(s => cardHTML(s, ctx)).join("");
+        }).join("")
+      : `<div class="empty"><b>Nada guardado</b>Toca em “Guardar” num concerto para o encontrares aqui.</div>`;
+  } else {
+    let list = showsForDay(state.day);
+    if (state.stageFilter) list = list.filter(s => s.stage === state.stageFilter);
+    if (state.onlyReco)    list = list.filter(s => recoFor(s.artist));
+    countTxt = `${list.length} concerto${list.length!==1?'s':''} · ${dayById[state.day].long}`;
+    cards = list.length
+      ? list.map(s => cardHTML(s, ctx)).join("")
+      : `<div class="empty"><b>Sem concertos</b>Experimenta outro dia ou tira os filtros.</div>`;
+  }
 
   const noFilter = !state.stageFilter && !state.onlyFav && !state.onlyReco;
   el.innerHTML = `
     <div class="fbar">
       <button class="chip ${noFilter?'on':''}" onclick="clearFilters()">Todos</button>
       <button class="chip reco-chip ${state.onlyReco?'on':''}" onclick="toggleOnlyReco()">★ Para ti</button>
-      <button class="chip ${state.onlyFav?'on':''}" onclick="toggleOnlyFav()">${icon('heart')}&nbsp;Favoritos</button>
+      <button class="chip ${state.onlyFav?'on':''}" onclick="toggleOnlyFav()">${icon('star')}&nbsp;Guardados</button>
       ${chips}
     </div>
-    <div class="count">${list.length} concerto${list.length!==1?'s':''} · ${dayById[state.day].long}</div>
+    <div class="count">${countTxt}</div>
     ${cards}`;
   stickFbar();
 
@@ -222,23 +245,43 @@ function stickFbar(){
   if (header && fbar) fbar.style.top = header.offsetHeight + "px";
 }
 
+// "1h 20min" / "45 min"
+function fmtDur(min){
+  const h = Math.floor(min/60), m = min%60;
+  return h ? `${h}h${m ? " "+m+"min" : ""}` : `${m} min`;
+}
+// Bloco de tempo livre entre dois concertos da agenda
+function gapBlock(from, to, day){
+  const gap = mins(to) - mins(from);
+  const livres = FESTIVAL.shows.filter(s =>
+    s.day === day && mins(s.start) < mins(to) && mins(s.end) > mins(from)).length;
+  return `<div class="gap">
+    <div class="gap-t">${fmtDur(gap)} livres</div>
+    <div class="gap-s">${from} – ${to}${livres ? ` · ${livres} concerto${livres!==1?"s":""} nesse intervalo` : ""}</div>
+  </div>`;
+}
+
 function viewMine(){
   const el = document.getElementById("view");
-  const all = favShows().sort((a,b)=> a.day===b.day ? mins(a.start)-mins(b.start) : a.day.localeCompare(b.day));
   const ctx = festivalNow();
 
-  if (!all.length){
-    el.innerHTML = `<div class="empty"><b>A tua agenda está vazia</b>Toca em “Guardar” nos concertos que não queres perder e aparecem aqui.</div>`;
+  if (!agendaShows().length){
+    el.innerHTML = `<div class="empty"><b>A tua agenda está vazia</b>Toca em “Guardar” num concerto e ele aparece aqui, junto com os artistas da tua playlist.</div>`;
     return;
   }
-  // agrupa por dia
   let html = "";
   FESTIVAL.days.forEach(d => {
-    const dayShows = all.filter(s => s.day === d.id);
-    if (!dayShows.length) return;
-    const anyConflict = dayShows.some(s => conflictsFor(s).length);
+    const items = agendaForDay(d.id);
+    if (!items.length) return;
+    const anyConflict = items.some(s => conflictsFor(s).length);
     html += `<div class="daylabel">${d.long}${anyConflict?' · ⚠️ sobreposições':''}</div>`;
-    html += dayShows.map(s => cardHTML(s, ctx)).join("");
+    items.forEach((s, i) => {
+      html += cardHTML(s, ctx);
+      const next = items[i+1];
+      if (next && mins(next.start) - mins(s.end) >= 15){   // < 15 min é tempo de deslocação
+        html += gapBlock(s.end, next.start, d.id);
+      }
+    });
   });
   el.innerHTML = html;
 }
@@ -352,8 +395,9 @@ function renderDays(){
 function renderNav(){
   document.querySelectorAll("nav.bottom button").forEach(b =>
     b.classList.toggle("on", b.dataset.tab === state.tab));
+  // o contador mostra SÓ o que tens na agenda para o dia de hoje (limpa-se de um dia para o outro)
   const badge = document.getElementById("mineBadge");
-  const n = state.favs.size;
+  const n = agendaForDay(festivalNow().day).length;
   badge.style.display = n ? "flex":"none"; badge.textContent = n;
 }
 function render(){
