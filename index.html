@@ -123,6 +123,11 @@
   .card.rec .fav{background:#fff; border-color:#000;}
   .card.rec .fav.on{background:#000; color:#fff; border-color:#000;}
 
+  /* JÁ ESTÁ NA TUA PLAYLIST — verde (vs amarelo = sugestão) */
+  .card.rec.playlist{background:#4ade80; border-color:#4ade80;}
+  .card.rec.playlist .c-meta{color:#14532d;}
+  .card.rec.playlist .reco span{color:#14532d;}
+
   .chip.reco-chip{border-color:#e6bf00;}
   .chip.reco-chip.on{background:var(--accent); color:#000; border-color:var(--accent);}
 
@@ -256,7 +261,8 @@
   .lk-yt{background:#ff0000;}
   .lk-web{background:var(--ink);}
   .reco-body{color:#7a5b00; font-weight:600; background:#fffbe9;}
-  .reco-body.taste{color:#5b3ea8; background:#f7f4ff;}
+  .reco-body.playlist{color:#14532d; background:#f0fdf4;}
+  .sec-lbl.playlist-lbl{background:#4ade80; color:#000;}
   .conf-row{display:flex; flex-direction:column; padding:5px 0;}
   .conf-row span{color:var(--mut); font-size:12px; font-weight:600;}
   .sheet-cta{position:sticky; bottom:0; background:var(--bg); border-top:1px solid var(--line);

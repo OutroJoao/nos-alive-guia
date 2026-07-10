@@ -116,15 +116,16 @@ function cardHTML(s, ctx){
     : "";
 
   const rec = recoFor(s.artist);
+  const recLabel = rec && rec.tier === "playlist" ? "♫ Na tua playlist" : "★ Sugestão para ti";
   const recHTML = rec
-    ? `<div class="reco ${rec.tier}">★ Para ti<span>${rec.why}</span></div>`
+    ? `<div class="reco ${rec.tier}">${recLabel}<span>${rec.why}</span></div>`
     : "";
 
   const img = imageFor(s.artist);
   const thumb = img ? `<img class="c-thumb" src="${img}" alt="" loading="lazy">` : "";
 
   return `
-    <div class="card ${isLive?'live':''} ${rec?'rec':''} ${isPast?'past':''}" onclick="openDetail('${s.id}')">
+    <div class="card ${isLive?'live':''} ${rec?'rec '+rec.tier:''} ${isPast?'past':''}" onclick="openDetail('${s.id}')">
       <div class="card-b" style="--stage:${st.color}">
         <div class="c-main">
           <div class="c-time mono">${fmtRange(s)}${tag}</div>
@@ -440,7 +441,7 @@ function renderSheet(){
   const conf = conflictsFor(s);
 
   const recBlock = rec ? `
-    <div class="sec-lbl">★ Para ti</div>
+    <div class="sec-lbl ${rec.tier}-lbl">${rec.tier === "playlist" ? "♫ Na tua playlist" : "★ Sugestão para ti"}</div>
     <div class="sec-body reco-body ${rec.tier}">${rec.why}</div>` : "";
 
   const confBlock = conf.length ? `
